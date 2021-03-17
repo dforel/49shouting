@@ -8,6 +8,26 @@ exports.command = 'unicom'
 
 exports.describe = 'unicom任务'
 
+function dateFormat(fmt, date) {
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
+}
+
 exports.builder = function (yargs) {
   return yargs
     .option('user', {
@@ -56,15 +76,16 @@ exports.handler = async function (argv) {
       })
       if (hasTasks) {
         await scheduler.execTask(command, account.tasks).catch(err => console.error("unicom任务:", err)).finally(() => {
+          
           if (Object.prototype.toString.call(scheduler.taskJson.rewards) === '[object Object]') {
-            console.info('今日获得奖品信息统计')
+            console.info('今日获得奖品信息统计') 
             let content = "今日获得奖品信息统计"
             let title = "今日获得奖品信息统计"
             for (let type in scheduler.taskJson.rewards) {
               console.info(`\t`, type, scheduler.taskJson.rewards[type])
               content+="\t"+type+"\t"+scheduler.taskJson.rewards[type]+"\r\n"
-            }
-            http.get('https://sc.ftqq.com/'+argv.pushtoken+".send?text=今日获得奖品信息统计"+time_str+"&desp="+content,function(data){
+            } 
+            http.get('https://sc.ftqq.com/'+argv.pushtoken+".send?text=今日获得奖品信息统计"+dateFormat("YYYY-mm-dd HH:MM", new Date())+"&desp="+content,function(data){
                 var str="";
                 data.on("data",function(chunk){
                     str+=chunk;//监听数据响应，拼接数据片段
@@ -74,6 +95,7 @@ exports.handler = async function (argv) {
                 })
             })
           }
+          
           console.info('当前任务执行完毕！')
         })
       } else {
