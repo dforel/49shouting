@@ -2,6 +2,7 @@
 const path = require('path')
 const { buildArgs } = require('../utils/util')
 const { default: PQueue } = require('p-queue');
+var http=require("http");
 
 exports.command = 'unicom'
 
@@ -57,9 +58,21 @@ exports.handler = async function (argv) {
         await scheduler.execTask(command, account.tasks).catch(err => console.error("unicom任务:", err)).finally(() => {
           if (Object.prototype.toString.call(scheduler.taskJson.rewards) === '[object Object]') {
             console.info('今日获得奖品信息统计')
+            let content = "今日获得奖品信息统计"
+            let title = "今日获得奖品信息统计"
             for (let type in scheduler.taskJson.rewards) {
               console.info(`\t`, type, scheduler.taskJson.rewards[type])
+              content+="\t"+type+"\t"+scheduler.taskJson.rewards[type]+"\r\n"
             }
+            http.get('https://sc.ftqq.com/'+sckey+".send?text=今日获得奖品信息统计"+time_str+"&desp="+content,function(data){
+                var str="";
+                data.on("data",function(chunk){
+                    str+=chunk;//监听数据响应，拼接数据片段
+                })
+                data.on("end",function(){
+                    console.log(str.toString())
+                })
+            })
           }
           console.info('当前任务执行完毕！')
         })
