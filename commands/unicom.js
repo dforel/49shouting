@@ -38,6 +38,7 @@ exports.handler = async function (argv) {
   var command = argv._[0]
   let accounts = buildArgs(argv)
   console.info('总账户数', accounts.length)
+  console.info('参数', argv)
   let concurrency = 1
   let queue = new PQueue({ concurrency });
   for (let account of accounts) {
