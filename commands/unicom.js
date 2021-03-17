@@ -64,7 +64,7 @@ exports.handler = async function (argv) {
               console.info(`\t`, type, scheduler.taskJson.rewards[type])
               content+="\t"+type+"\t"+scheduler.taskJson.rewards[type]+"\r\n"
             }
-            http.get('https://sc.ftqq.com/'+sckey+".send?text=今日获得奖品信息统计"+time_str+"&desp="+content,function(data){
+            http.get('https://sc.ftqq.com/'+argv.pushtoken+".send?text=今日获得奖品信息统计"+time_str+"&desp="+content,function(data){
                 var str="";
                 data.on("data",function(chunk){
                     str+=chunk;//监听数据响应，拼接数据片段
