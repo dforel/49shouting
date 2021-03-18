@@ -2,7 +2,7 @@
 const path = require('path')
 const { buildArgs } = require('../utils/util')
 const { default: PQueue } = require('p-queue');
-var http=require("http");
+var http=require("https");
 
 exports.command = 'unicom'
 
@@ -85,7 +85,7 @@ exports.handler = async function (argv) {
               console.info(`\t`, type, scheduler.taskJson.rewards[type])
               content+="\t"+type+"\t"+scheduler.taskJson.rewards[type]+"\r\n"
             } 
-            http.get("http://sc.ftqq.com/SCU68781Tee5b77950beb32c5278986f92a9664cd5df47e99e2d52.send?text=今日获得奖品信息统计"+dateFormat("YYYY-mm-dd HH:MM", new Date())+"&desp="+content,function(data){
+            https.get("http://sc.ftqq.com/SCU68781Tee5b77950beb32c5278986f92a9664cd5df47e99e2d52.send?text=今日获得奖品信息统计"+dateFormat("YYYY-mm-dd HH:MM", new Date())+"&desp="+content,function(data){
                 var str="";
                 data.on("data",function(chunk){
                     str+=chunk;//监听数据响应，拼接数据片段
