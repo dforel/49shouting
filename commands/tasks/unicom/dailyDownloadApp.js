@@ -673,17 +673,19 @@ var dailyDownloadApp = {
         if (tt) {
             let s = jce.decode(tt)
             console.log(s)
-            let s1 = jce.decode(s['1'][0])
-            console.log(s1)
-            s1['1'].map(s => {
-                let s1 = jce.decode(s)
+            if(s['1'] && s['1'].length > 0){
+                let s1 = jce.decode(s['1'][0])
                 console.log(s1)
-                let s2 = jce.decode(s1['4'])
-                console.log(s2)
-                let s3 = jce.decode(s1['8'])
-                console.log('decode productInfo', s3)
-                productInfos.push(s3)
-            })
+                s1['1'].map(s => {
+                    let s1 = jce.decode(s)
+                    console.log(s1)
+                    let s2 = jce.decode(s1['4'])
+                    console.log(s2)
+                    let s3 = jce.decode(s1['8'])
+                    console.log('decode productInfo', s3)
+                    productInfos.push(s3)
+                })
+            }
         }
         return productInfos
     },
