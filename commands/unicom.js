@@ -2,7 +2,7 @@
 const path = require('path')
 const { buildArgs } = require('../utils/util')
 const { default: PQueue } = require('p-queue');
-var http=require("https");
+var https=require("https");
 
 exports.command = 'unicom'
 
